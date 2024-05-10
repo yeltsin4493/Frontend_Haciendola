@@ -30,7 +30,7 @@ export class ProductMaintenanceComponent implements OnInit {
     stock: '',
     price: '',
     compare_price: '',
-    barcode: '',
+    barcode: null,
   };
   deleteConfirmationVisible: boolean = false;
   productToDelete: any;
