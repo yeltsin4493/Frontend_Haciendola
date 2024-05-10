@@ -1,1 +1,90 @@
-<p>product-maintenance works!</p>
+<!-- product-maintenance.component.html -->
+<header style="background-color: #126cdb; padding: 10px">
+  <div class="container-fluid">
+    <!-- Enlace para cerrar sesión -->
+    <a href="#" class="btn btn-link text-white" (click)="logout()"
+      >Cerrar sesión</a
+    >
+  </div>
+</header>
+
+<div class="container mt-5">
+  <!-- Botón Nuevo -->
+  <div class="text-right mb-3">
+    <button class="btn btn-primary" (click)="openModal()">Nuevo</button>
+  </div>
+
+  <!-- Tabla de Productos -->
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Handle</th>
+        <th>Titulo</th>
+        <th>Descripción</th>
+        <th>SKU</th>
+        <th>Gramos</th>
+        <th>Stock</th>
+        <th>Precio</th>
+        <th>Comparar Precio</th>
+        <th>Código de Barras</th>
+        <th>Opciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let product of products">
+        <td>{{ product.handle }}</td>
+        <td>{{ product.title }}</td>
+        <td>{{ product.description }}</td>
+        <td>{{ product.sku }}</td>
+        <td>{{ product.grams }}</td>
+        <td>{{ product.stock }}</td>
+        <td>{{ product.price }}</td>
+        <td>{{ product.compare_price }}</td>
+        <td>{{ product.barcode }}</td>
+        <td>
+          <a (click)="editProduct(product)">
+            <i class="fas fa-pencil-alt"></i>
+            <!-- Icono de lápiz -->
+          </a>
+          <a (click)="deleteProduct(product)">
+            <i class="fas fa-trash-alt"></i>
+            <!-- Icono de basura -->
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal Nuevo Producto -->
+<div
+  class="modal fade"
+  id="newProductModal"
+  tabindex="-1"
+  aria-labelledby="newProductModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="newProductModalLabel">Nuevo Producto</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <!-- Formulario para agregar nuevo producto -->
+        <!-- Aquí debes crear el formulario con los campos necesarios -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cancelar
+        </button>
+        <button type="button" class="btn btn-primary">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
