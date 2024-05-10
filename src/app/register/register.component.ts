@@ -1,13 +1,15 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { BackendService } from '../services/backend.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-register',
   standalone: true,
   imports: [FormsModule],
   templateUrl: './register.component.html',
-  styleUrl: './register.component.css'
+  styleUrl: './register.component.css',
 })
 export class RegisterComponent {
   userData = {
@@ -16,15 +18,23 @@ export class RegisterComponent {
     password: '',
   };
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private backendService: BackendService, private toastr: ToastrService) {}
 
   register() {
-    // Aquí iría la lógica para enviar los datos del formulario al backend
-    console.log('Registrando usuario con los siguientes datos:', this.userData);
-    // Lógica de registro...
-    
-    // Después de registrar con éxito, redirige al usuario a la página de inicio de sesión
-    this.router.navigate(['/login']);
+    this.backendService.registerUser(this.userData).subscribe({
+      next: (response) => {
+        console.log('Registro exitoso:', response);
+        this.toastr.success('Usuario registrado satisfactoriamente', 'Éxito');
+        // Lógica para manejar la respuesta del backend, como mostrar un mensaje de éxito o redirigir a otra página
+        this.router.navigate(['/login']);
+      },
+      error: (error) => {
+        console.error('Error al registrar usuario:', error);
+        const errorMessage = error.error.message || 'Error al registrar usuario';
+        this.toastr.error(errorMessage, 'Error');
+        // Lógica para manejar el error, como mostrar un mensaje de error al usuario
+      },
+    });
   }
 
   goToLogin() {
