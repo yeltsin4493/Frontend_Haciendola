@@ -1,0 +1,28 @@
+<div class="container-fluid mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-4"> 
+      <div class="card">
+        <div class="card-header">
+          Iniciar sesión
+        </div>
+        <div class="card-body">
+          <form (ngSubmit)="login()" #loginForm="ngForm">
+            <div class="mb-3">
+              <label for="email" class="form-label fs-6">Correo Electrónico</label> 
+              <input type="email" class="form-control form-control-sm" id="email" name="email" [(ngModel)]="userData.email" required>
+            </div>
+            
+            <div class="mb-3">
+              <label for="password" class="form-label fs-6">Contraseña</label> 
+              <input type="password" class="form-control form-control-sm" id="password" name="password" [(ngModel)]="userData.password" required> 
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm" [disabled]="!loginForm.valid">Iniciar sesión</button> 
+          </form>
+        </div>
+        <div class="card-footer">
+          ¿No tienes una cuenta? <a (click)="goToRegister()">Regístrate aquí</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
