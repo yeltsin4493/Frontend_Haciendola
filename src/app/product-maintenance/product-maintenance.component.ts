@@ -22,14 +22,14 @@ export class ProductMaintenanceComponent implements OnInit {
   products: any[] = [];
   selectedProduct: any = {};
   newProduct: any = {
-    handle: '',
-    title: '',
-    description: '',
-    sku: '',
-    grams: '',
-    stock: '',
-    price: '',
-    compare_price: '',
+    handle: null,
+    title: null,
+    description: null,
+    sku: null,
+    grams: null,
+    stock: null,
+    price: null,
+    compare_price: null,
     barcode: null,
   };
   deleteConfirmationVisible: boolean = false;
@@ -103,7 +103,7 @@ export class ProductMaintenanceComponent implements OnInit {
       stock: this.selectedProduct.stock,
       price: this.selectedProduct.price,
       compare_price: this.selectedProduct.compare_price,
-      barcode: this.selectedProduct.barcode,
+      barcode: +this.selectedProduct.barcode,
     };
     console.log(this.selectedProduct);
     this.backendService
