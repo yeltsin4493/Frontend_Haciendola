@@ -42,32 +42,33 @@
         <td>{{ product.compare_price }}</td>
         <td>{{ product.barcode }}</td>
         <td>
-          <a (click)="editProduct(product)">
+          <button (click)="modalEdit(product)">
             <i class="fas fa-pencil-alt"></i>
             <!-- Icono de lápiz -->
-          </a>
-          <a (click)="deleteProduct(product)">
+          </button>
+          <button (click)="modalDelete(product)">
             <i class="fas fa-trash-alt"></i>
             <!-- Icono de basura -->
-          </a>
+          </button>
         </td>
       </tr>
     </tbody>
   </table>
 </div>
 
-<!-- Modal Nuevo Producto -->
+<!-- Modal Crear -->
 <div
+  #modal
   class="modal fade"
-  id="newProductModal"
+  id="exampleModal"
   tabindex="-1"
-  aria-labelledby="newProductModalLabel"
+  aria-labelledby="exampleModalLabel"
   aria-hidden="true"
 >
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="newProductModalLabel">Nuevo Producto</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Crear Nuevo Producto</h5>
         <button
           type="button"
           class="btn-close"
@@ -77,13 +78,299 @@
       </div>
       <div class="modal-body">
         <!-- Formulario para agregar nuevo producto -->
-        <!-- Aquí debes crear el formulario con los campos necesarios -->
+        <form (submit)="saveProduct()">
+          <div class="mb-3 row">
+            <!-- Grupo de dos campos de entrada en una misma fila -->
+            <div class="col-md-6">
+              <label for="handle" class="form-label">Handle</label>
+              <input
+                type="text"
+                class="form-control"
+                id="handle"
+                [(ngModel)]="newProduct.handle"
+                name="handle"
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label for="title" class="form-label">Nombre</label>
+              <input
+                type="text"
+                class="form-control"
+                id="title"
+                [(ngModel)]="newProduct.title"
+                name="title"
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label for="sku" class="form-label">SKU</label>
+              <input
+                type="text"
+                class="form-control"
+                id="sku"
+                [(ngModel)]="newProduct.sku"
+                name="sku"
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label for="grams" class="form-label">Gramos</label>
+              <input
+                type="number"
+                class="form-control"
+                id="grams"
+                [(ngModel)]="newProduct.grams"
+                name="grams"
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label for="stock" class="form-label">Stock</label>
+              <input
+                type="number"
+                class="form-control"
+                id="stock"
+                [(ngModel)]="newProduct.stock"
+                name="stock"
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label for="price" class="form-label">Precio</label>
+              <input
+                type="number"
+                class="form-control"
+                id="price"
+                [(ngModel)]="newProduct.price"
+                name="price"
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label for="comparePrice" class="form-label"
+                >Precio Comparativo</label
+              >
+              <input
+                type="number"
+                class="form-control"
+                id="comparePrice"
+                [(ngModel)]="newProduct.compare_price"
+                name="comparePrice"
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label for="barcode" class="form-label">Código de Barras</label>
+              <input
+                type="number"
+                class="form-control"
+                id="barcode"
+                [(ngModel)]="newProduct.barcode"
+                name="barcode"
+              />
+            </div>
+
+            <div class="col-md-12">
+              <label for="description" class="form-label">Descripción</label>
+              <textarea
+                class="form-control"
+                id="description"
+                [(ngModel)]="newProduct.description"
+                name="description"
+              ></textarea>
+            </div>
+          </div>
+        </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          Cancelar
+          Close
         </button>
-        <button type="button" class="btn btn-primary">Guardar</button>
+        <button type="button" class="btn btn-primary" (click)="saveProduct()">
+          Save changes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Editar -->
+<div
+  #modaledit
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Editar Producto</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <!-- Formulario para agregar nuevo producto -->
+        <form (submit)="editProduct()">
+          <div class="mb-3 row">
+            <!-- Grupo de dos campos de entrada en una misma fila -->
+            <div class="col-md-6">
+              <label for="handle" class="form-label">Handle</label>
+              <input
+                type="text"
+                class="form-control"
+                id="handle"
+                [(ngModel)]="selectedProduct.handle"
+                name="handle"
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label for="title" class="form-label">Nombre</label>
+              <input
+                type="text"
+                class="form-control"
+                id="title"
+                [(ngModel)]="selectedProduct.title"
+                name="title"
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label for="sku" class="form-label">SKU</label>
+              <input
+                type="text"
+                class="form-control"
+                id="sku"
+                [(ngModel)]="selectedProduct.sku"
+                name="sku"
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label for="grams" class="form-label">Gramos</label>
+              <input
+                type="number"
+                class="form-control"
+                id="grams"
+                [(ngModel)]="selectedProduct.grams"
+                name="grams"
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label for="stock" class="form-label">Stock</label>
+              <input
+                type="number"
+                class="form-control"
+                id="stock"
+                [(ngModel)]="selectedProduct.stock"
+                name="stock"
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label for="price" class="form-label">Precio</label>
+              <input
+                type="number"
+                class="form-control"
+                id="price"
+                [(ngModel)]="selectedProduct.price"
+                name="price"
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label for="comparePrice" class="form-label"
+                >Precio Comparativo</label
+              >
+              <input
+                type="number"
+                class="form-control"
+                id="comparePrice"
+                [(ngModel)]="selectedProduct.compare_price"
+                name="comparePrice"
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label for="barcode" class="form-label">Código de Barras</label>
+              <input
+                type="number"
+                class="form-control"
+                id="barcode"
+                [(ngModel)]="selectedProduct.barcode"
+                name="barcode"
+              />
+            </div>
+
+            <div class="col-md-12">
+              <label for="description" class="form-label">Descripción</label>
+              <textarea
+                class="form-control"
+                id="description"
+                [(ngModel)]="selectedProduct.description"
+                name="description"
+              ></textarea>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button> -->
+        <button type="button" class="btn btn-primary" (click)="editProduct()">
+          Save changes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Eliminar -->
+<div
+  #modaldelete
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteConfirmationModalLabel">
+          Eliminar Producto
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        ¿Está seguro de que desea eliminar el producto
+        {{ productToDelete?.title }}?
+      </div>
+      <div class="modal-footer">
+        <!-- <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="hideDeleteConfirmation()"
+        >
+          Cancelar
+        </button> -->
+        <button type="button" class="btn btn-danger" (click)="confirmDelete()">
+          Eliminar
+        </button>
       </div>
     </div>
   </div>
