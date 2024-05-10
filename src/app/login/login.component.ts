@@ -27,23 +27,18 @@ export class LoginComponent {
     this.backendService.login(this.userData).subscribe({
       next: (response) => {
         console.log('Login successful:', response);
-        // Almacena el token JWT en el localStorage
         localStorage.setItem('token', response.token);
-        // Muestra un mensaje de éxito
         this.toastr.success('Inicio de sesión exitoso', 'Éxito');
-        // Redirige al usuario a la página de mantenimiento de productos
         this.router.navigate(['/product-maintenance']);
       },
       error: (error) => {
         console.error('Login failed:', error);
-        // Muestra un mensaje de error
         this.toastr.error('Credenciales incorrectas', 'Error');
       },
     });
   }
 
   goToRegister() {
-    // Navega a la página de registro cuando se hace clic en el enlace
     this.router.navigate(['/register']);
   }
 }

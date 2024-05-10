@@ -1,37 +1,35 @@
-<!-- product-maintenance.component.html -->
-<header style="background-color: #126cdb; padding: 10px">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
-    <!-- Enlace para cerrar sesión -->
-    <a href="#" class="btn btn-link text-white" (click)="logout()"
-      >Cerrar sesión</a
-    >
+    <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+      <a href="#" class="btn btn-link text-white" (click)="logout()"
+        >Cerrar sesión</a
+      >
+    </div>
   </div>
-</header>
+</nav>
 
 <div class="container mt-5">
-  <!-- Botón Nuevo -->
   <div class="text-right mb-3">
     <button class="btn btn-primary" (click)="openModal()">Nuevo</button>
   </div>
 
-  <!-- Tabla de Productos -->
-  <table class="table">
+  <table class="table table-striped">
     <thead>
       <tr>
-        <th>Handle</th>
-        <th>Titulo</th>
-        <th>Descripción</th>
-        <th>SKU</th>
-        <th>Gramos</th>
-        <th>Stock</th>
-        <th>Precio</th>
-        <th>Comparar Precio</th>
-        <th>Código de Barras</th>
-        <th>Opciones</th>
+        <th scope="col">Handle</th>
+        <th scope="col">Titulo</th>
+        <th scope="col">Descripción</th>
+        <th scope="col">SKU</th>
+        <th scope="col">Gramos</th>
+        <th scope="col">Stock</th>
+        <th scope="col">Precio</th>
+        <th scope="col">Comparar Precio</th>
+        <th scope="col">Código de Barras</th>
+        <th scope="col">Opciones</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let product of products">
+      <tr *ngFor="let product of pagedProducts">
         <td>{{ product.handle }}</td>
         <td>{{ product.title }}</td>
         <td>{{ product.description }}</td>
@@ -42,18 +40,43 @@
         <td>{{ product.compare_price }}</td>
         <td>{{ product.barcode }}</td>
         <td>
-          <button (click)="modalEdit(product)">
+          <button class="btn btn-success btn-sm" (click)="modalEdit(product)">
             <i class="fas fa-pencil-alt"></i>
-            <!-- Icono de lápiz -->
           </button>
-          <button (click)="modalDelete(product)">
+          <button class="btn btn-danger btn-sm" (click)="modalDelete(product)">
             <i class="fas fa-trash-alt"></i>
-            <!-- Icono de basura -->
           </button>
         </td>
       </tr>
     </tbody>
   </table>
+
+  <nav aria-label="...">
+    <ul class="pagination justify-content-center">
+      <li class="page-item" [ngClass]="{ disabled: currentPage === 1 }">
+        <a
+          class="page-link"
+          (click)="setPage(currentPage - 1)"
+          tabindex="-1"
+          aria-disabled="true"
+          >Previous</a
+        >
+      </li>
+      <li
+        class="page-item"
+        *ngFor="let page of totalPages"
+        [ngClass]="{ active: page === currentPage }"
+      >
+        <a class="page-link" (click)="setPage(page)">{{ page }}</a>
+      </li>
+      <li
+        class="page-item"
+        [ngClass]="{ disabled: currentPage === totalPages.length }"
+      >
+        <a class="page-link" (click)="setPage(currentPage + 1)">Next</a>
+      </li>
+    </ul>
+  </nav>
 </div>
 
 <!-- Modal Crear -->
@@ -77,10 +100,8 @@
         ></button>
       </div>
       <div class="modal-body">
-        <!-- Formulario para agregar nuevo producto -->
         <form (submit)="saveProduct()">
           <div class="mb-3 row">
-            <!-- Grupo de dos campos de entrada en una misma fila -->
             <div class="col-md-6">
               <label for="handle" class="form-label">Handle</label>
               <input
@@ -216,10 +237,8 @@
         ></button>
       </div>
       <div class="modal-body">
-        <!-- Formulario para agregar nuevo producto -->
         <form (submit)="editProduct()">
           <div class="mb-3 row">
-            <!-- Grupo de dos campos de entrada en una misma fila -->
             <div class="col-md-6">
               <label for="handle" class="form-label">Handle</label>
               <input
@@ -323,9 +342,6 @@
         </form>
       </div>
       <div class="modal-footer">
-        <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          Close
-        </button> -->
         <button type="button" class="btn btn-primary" (click)="editProduct()">
           Save changes
         </button>
@@ -361,13 +377,6 @@
         {{ productToDelete?.title }}?
       </div>
       <div class="modal-footer">
-        <!-- <button
-          type="button"
-          class="btn btn-secondary"
-          (click)="hideDeleteConfirmation()"
-        >
-          Cancelar
-        </button> -->
         <button type="button" class="btn btn-danger" (click)="confirmDelete()">
           Eliminar
         </button>

@@ -19,7 +19,7 @@ export class ProductMaintenanceComponent implements OnInit {
   @ViewChild('modal') modal?: ElementRef;
   @ViewChild('modaledit') modaledit?: ElementRef;
   @ViewChild('modaldelete') modaldelete?: ElementRef;
-  products: any[] = []; // Lista de productos
+  products: any[] = [];
   selectedProduct: any = {};
   newProduct: any = {
     handle: '',
@@ -27,29 +27,33 @@ export class ProductMaintenanceComponent implements OnInit {
     description: '',
     sku: '',
     grams: '',
-    stock: 0,
+    stock: '',
     price: '',
     compare_price: '',
     barcode: '',
   };
   deleteConfirmationVisible: boolean = false;
   productToDelete: any;
+  pagedProducts: any[] = [];
+  currentPage: number = 1;
+  itemsPerPage: number = 4;
 
-  constructor(private router: Router, private backendService: BackendService, private toastr: ToastrService) {}
+  constructor(
+    private router: Router,
+    private backendService: BackendService,
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit(): void {
-    // Llama a loadProducts() cuando se inicializa el componente
     this.loadProducts();
   }
 
   logout(): void {
-    // Eliminar los datos del usuario del almacenamiento local y redirigir a la página de inicio de sesión
     localStorage.removeItem('token');
     this.router.navigate(['/login']);
   }
 
   openModal(): void {
-    // Abrir el modal para agregar un nuevo producto
     $(this.modal?.nativeElement).modal('show');
   }
 
@@ -57,9 +61,11 @@ export class ProductMaintenanceComponent implements OnInit {
     this.backendService.loadProducts().subscribe({
       next: (response) => {
         this.products = response;
+        this.setPage(1);
         this.toastr.success('Se listaron los productos', 'Éxito');
       },
       error: (error) => {
+        this.toastr.error('Hubo un error al listar los productos', 'Error');
         console.error('Error al cargar los productos:', error);
       },
     });
@@ -70,12 +76,13 @@ export class ProductMaintenanceComponent implements OnInit {
       next: (response) => {
         console.log('Producto guardado:', response);
         $(this.modal?.nativeElement).modal('hide');
+        this.toastr.success('Se guardo el producto', 'Éxito');
+        this.loadProducts();
 
-        // Aquí puedes agregar lógica adicional, como mostrar un mensaje de éxito o limpiar el formulario
       },
       error: (error) => {
         console.error('Error al guardar producto:', error);
-        // Aquí puedes agregar lógica para manejar errores, como mostrar un mensaje de error al usuario
+        this.toastr.error('Hubo un error al guardar el producto', 'Error');
       },
     });
   }
@@ -105,18 +112,17 @@ export class ProductMaintenanceComponent implements OnInit {
         next: (response) => {
           console.log('Producto actualizado:', response);
           $(this.modaledit?.nativeElement).modal('hide');
-
-          // Aquí puedes agregar lógica adicional, como mostrar un mensaje de éxito o recargar la lista de productos
+          this.toastr.success('Se edito el producto', 'Éxito');
+          this.loadProducts();
         },
         error: (error) => {
           console.error('Error al actualizar producto:', error);
-          // Aquí puedes agregar lógica para manejar errores, como mostrar un mensaje de error al usuario
+          this.toastr.error('Hubo un error al editar el producto', 'Error');
         },
       });
   }
 
   modalDelete(product: any): void {
-    // Implementar lógica para editar un producto
     this.productToDelete = product;
     $(this.modaldelete?.nativeElement).modal('show');
   }
@@ -132,14 +138,13 @@ export class ProductMaintenanceComponent implements OnInit {
       this.backendService.deleteProduct(this.productToDelete.id).subscribe({
         next: (response) => {
           console.log('Producto eliminado:', this.productToDelete);
-          // Actualizar la lista de productos después de eliminar
-          this.loadProducts();
-          // Ocultar el modal de confirmación
           this.hideDeleteConfirmation();
+          this.toastr.success('Se elimino el producto', 'Éxito');
+          this.loadProducts();
         },
         error: (error) => {
           console.error('Error al eliminar producto:', error);
-          // Aquí puedes agregar lógica para manejar errores, como mostrar un mensaje de error al usuario
+          this.toastr.error('Hubo un error al eliminar el producto', 'Error');
         },
       });
     }
@@ -149,5 +154,22 @@ export class ProductMaintenanceComponent implements OnInit {
     $(this.modaldelete?.nativeElement).modal('hide');
     this.deleteConfirmationVisible = false;
     this.productToDelete = null;
+  }
+
+  setPage(page: number): void {
+    this.currentPage = page;
+    const startIndex = (page - 1) * this.itemsPerPage;
+    const endIndex = Math.min(
+      startIndex + this.itemsPerPage,
+      this.products.length
+    );
+    this.pagedProducts = this.products.slice(startIndex, endIndex);
+  }
+
+  get totalPages(): number[] {
+    return Array.from(
+      { length: Math.ceil(this.products.length / this.itemsPerPage) },
+      (_, i) => i + 1
+    );
   }
 }

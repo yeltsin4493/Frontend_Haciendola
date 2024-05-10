@@ -1,3 +1,7 @@
 button {
-    margin-right: 1px; /* Ajusta este valor según sea necesario */
-  }
+  margin-right: 2px;
+}
+
+.page-link {
+  cursor: pointer;
+}
